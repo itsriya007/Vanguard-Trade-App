@@ -1,0 +1,6 @@
+{
+  "name": "Vanguard Trade - Indian Stock Market & Wealth App",
+  "description": "High-performance Indian stock trading, IPO application, and Mutual Fund SIP mobile platform with real-time NIFTY/SENSEX feeds, smart brokerage calculator, and panic controls.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

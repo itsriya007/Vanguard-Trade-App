@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-midnight: #0B0E14;
+    --card-slate: #161B26;
+    --accent-indigo: #6C5CE7;
+    --bull-mint: #00E676;
+    --bear-crimson: #FF5252;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #0B0E14;
+    color: #F1F5F9;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Monospace font for numerical precision */
+  .font-mono-numbers {
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Custom scrollbars for mobile & desktop */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(108, 92, 231, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(108, 92, 231, 0.5);
+}
+
+/* Glassmorphism utility */
+.glass-slate {
+  background-color: rgba(22, 27, 38, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-slate-elevated {
+  background-color: rgba(26, 32, 45, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(108, 92, 231, 0.2);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+}
+
+/* Flash tick animation */
+@keyframes flashGreen {
+  0% { background-color: rgba(0, 230, 118, 0.35); }
+  100% { background-color: transparent; }
+}
+
+@keyframes flashRed {
+  0% { background-color: rgba(255, 82, 82, 0.35); }
+  100% { background-color: transparent; }
+}
+
+.tick-flash-up {
+  animation: flashGreen 0.7s ease-out;
+}
+
+.tick-flash-down {
+  animation: flashRed 0.7s ease-out;
+}
+
+/* Range input styling for SIP and quantity */
+input[type="range"] {
+  accent-color: #6C5CE7;
+}

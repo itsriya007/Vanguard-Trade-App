@@ -1,0 +1,82 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account profile for authenticated Vanguard Trade investors",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique Firebase Authentication UID" },
+        "email": { "type": "string", "format": "email", "description": "Investor email address" },
+        "displayName": { "type": "string", "description": "Full name or investor alias" },
+        "photoURL": { "type": "string", "description": "Profile picture URL" },
+        "kycStatus": { "type": "string", "enum": ["VERIFIED", "PENDING"], "description": "SEBI/CDSL KYC verification status" },
+        "cdslBOID": { "type": "string", "description": "16-digit CDSL Demat Beneficiary Owner ID" },
+        "preferredMode": { "type": "string", "enum": ["beginner", "pro"], "description": "Default trading mode preference" },
+        "createdAt": { "type": "string", "description": "Account creation timestamp" },
+        "updatedAt": { "type": "string", "description": "Last updated timestamp" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Holding": {
+      "title": "Portfolio Holding",
+      "description": "Individual stock delivery holding in the user's Demat account",
+      "type": "object",
+      "properties": {
+        "symbol": { "type": "string", "description": "NSE/BSE stock ticker" },
+        "name": { "type": "string", "description": "Company name" },
+        "quantity": { "type": "number", "description": "Number of shares owned" },
+        "avgBuyPrice": { "type": "number", "description": "Volume-weighted purchase price in INR" },
+        "productType": { "type": "string", "enum": ["CNC", "MIS"], "description": "Delivery CNC or Intraday MIS" },
+        "updatedAt": { "type": "string", "description": "Timestamp of last modification" }
+      },
+      "required": ["symbol", "quantity", "avgBuyPrice"]
+    },
+    "Order": {
+      "title": "Trade Order",
+      "description": "Executed or pending stock order record",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string", "description": "Unique trade order identifier" },
+        "symbol": { "type": "string", "description": "Stock ticker symbol" },
+        "type": { "type": "string", "enum": ["BUY", "SELL"], "description": "Order transaction type" },
+        "product": { "type": "string", "enum": ["CNC", "MIS"], "description": "Product category" },
+        "quantity": { "type": "number", "description": "Shares transacted" },
+        "price": { "type": "number", "description": "Execution price in INR" },
+        "status": { "type": "string", "enum": ["EXECUTED", "PENDING", "CANCELLED"], "description": "Order state" },
+        "timestamp": { "type": "string", "description": "Execution timestamp" }
+      },
+      "required": ["symbol", "type", "quantity", "price", "status"]
+    },
+    "PriceAlert": {
+      "title": "Stock Price Alert",
+      "description": "Custom user price alert on an equity ticker",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique alert ID" },
+        "symbol": { "type": "string", "description": "NSE stock ticker" },
+        "targetPrice": { "type": "number", "description": "Target trigger price in INR" },
+        "condition": { "type": "string", "enum": ["ABOVE", "BELOW"], "description": "Trigger threshold condition" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" }
+      },
+      "required": ["symbol", "targetPrice", "condition"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile collection containing personal investor settings and KYC state"
+    },
+    "/users/{userId}/portfolio/{holdingId}": {
+      "schema": "Holding",
+      "description": "User specific portfolio holdings"
+    },
+    "/users/{userId}/orders/{orderId}": {
+      "schema": "Order",
+      "description": "User trade execution log"
+    },
+    "/users/{userId}/alerts/{alertId}": {
+      "schema": "PriceAlert",
+      "description": "User custom stock price alerts"
+    }
+  }
+}

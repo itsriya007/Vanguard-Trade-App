@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "Vanguard Trade",
+    "slug": "vanguard-trade",
+    "version": "2.4.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0B0E14"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "in.vanguardtrade.app",
+      "buildNumber": "240",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Vanguard Trade uses FaceID for instant biometric authentication and trade execution authorization.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "in.vanguardtrade.app",
+      "versionCode": 240,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0B0E14"
+      },
+      "permissions": [
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT",
+        "INTERNET",
+        "VIBRATE",
+        "WAKE_LOCK"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow Vanguard Trade to use FaceID to secure your stock portfolio."
+        }
+      ]
+    ]
+  }
+}
