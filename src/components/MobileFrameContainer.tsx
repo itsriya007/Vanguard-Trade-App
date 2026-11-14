@@ -1,15 +1,9 @@
 import React from 'react';
 import { useTrading } from '../context/TradingContext';
-import { Wifi, Battery, AlertCircle, CheckCircle, Info, X } from 'lucide-react';
+import { AlertCircle, CheckCircle, Info, X } from 'lucide-react';
 
 export const MobileFrameContainer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { viewMode, setViewMode, toasts, removeToast } = useTrading();
-
-  const currentTime = new Date().toLocaleTimeString('en-IN', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  });
 
   return (
     <div className="min-h-screen bg-[#07090D] flex flex-col items-center justify-start py-0 md:py-6 sm:px-4">
@@ -17,29 +11,29 @@ export const MobileFrameContainer: React.FC<{ children: React.ReactNode }> = ({ 
       <div className="hidden md:flex items-center justify-between w-full max-w-4xl mb-3 px-4 py-2 bg-slate-900/60 rounded-xl border border-slate-800 text-xs text-slate-400">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#00E676] animate-pulse" />
-          <strong className="text-white">Vanguard Trade Mobile Preview</strong>
+          <strong className="text-white">Vanguard Trade</strong>
           <span>• Indian Equities, IPOs & Mutual Funds</span>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setViewMode('mobile-frame')}
-            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               viewMode === 'mobile-frame'
                 ? 'bg-[#6C5CE7] text-white'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            iPhone / Android Frame
+            Compact Mobile View
           </button>
           <button
             onClick={() => setViewMode('responsive')}
-            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               viewMode === 'responsive'
                 ? 'bg-[#6C5CE7] text-white'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            Full Width Fluid View
+            Full Width View
           </button>
         </div>
       </div>
@@ -48,40 +42,12 @@ export const MobileFrameContainer: React.FC<{ children: React.ReactNode }> = ({ 
       <div
         className={`w-full transition-all duration-300 ${
           viewMode === 'mobile-frame'
-            ? 'max-w-[430px] rounded-[44px] border-[6px] border-slate-800/90 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] overflow-hidden bg-[#0B0E14] relative ring-1 ring-white/10'
-            : 'max-w-3xl bg-[#0B0E14] min-h-screen md:rounded-3xl border border-slate-800/80 shadow-2xl relative'
+            ? 'md:max-w-[430px] md:rounded-3xl md:border md:border-slate-800/90 md:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] md:overflow-hidden bg-[#0B0E14] relative md:ring-1 md:ring-white/10 min-h-screen md:min-h-0'
+            : 'max-w-3xl bg-[#0B0E14] min-h-screen md:rounded-3xl md:border md:border-slate-800/80 shadow-2xl relative'
         }`}
       >
-        {/* Flagship Mobile Status Bar (Dynamic Island style) */}
-        {viewMode === 'mobile-frame' && (
-          <div className="w-full bg-[#0B0E14] pt-3 pb-1 px-7 flex items-center justify-between text-white text-[11px] font-mono select-none z-50">
-            <span>{currentTime}</span>
-
-            {/* Dynamic Island Pill */}
-            <div className="w-24 h-5 rounded-full bg-black border border-slate-800 flex items-center justify-center gap-1.5 px-2 shadow-inner">
-              <span className="w-2 h-2 rounded-full bg-[#00E676] animate-pulse" />
-              <span className="text-[9px] font-sans text-slate-300 font-bold tracking-tight">
-                Vanguard
-              </span>
-            </div>
-
-            <div className="flex items-center gap-1.5 text-slate-300">
-              <span className="text-[10px] font-sans font-semibold">5G</span>
-              <Wifi className="w-3.5 h-3.5" />
-              <Battery className="w-4 h-4 text-[#00E676]" />
-            </div>
-          </div>
-        )}
-
         {/* Child Components */}
-        <div className="min-h-[840px] flex flex-col relative">{children}</div>
-
-        {/* Flagship Home Indicator Pill */}
-        {viewMode === 'mobile-frame' && (
-          <div className="w-full py-2 bg-[#0B0E14] flex justify-center sticky bottom-0 z-50 pointer-events-none">
-            <div className="w-32 h-1 rounded-full bg-slate-600/70" />
-          </div>
-        )}
+        <div className="min-h-screen md:min-h-[840px] flex flex-col relative">{children}</div>
 
         {/* Global Toast Stack */}
         <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[70] flex flex-col gap-2 w-full max-w-sm px-4 pointer-events-none">

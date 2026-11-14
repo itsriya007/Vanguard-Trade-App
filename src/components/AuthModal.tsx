@@ -19,6 +19,9 @@ import {
   CreditCard,
   X,
   RefreshCw,
+  Copy,
+  Check,
+  ExternalLink,
 } from 'lucide-react';
 
 export const AuthModal: React.FC = () => {
@@ -56,6 +59,7 @@ export const AuthModal: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [formErrorCode, setFormErrorCode] = useState<string | null>(null);
+  const [copiedDomain, setCopiedDomain] = useState(false);
   const [resetSentToEmail, setResetSentToEmail] = useState<string | null>(null);
 
   // In-app oobCode password reset state (if user clicks reset link returning to app)
@@ -224,6 +228,7 @@ export const AuthModal: React.FC = () => {
     setSubmitting(false);
     if (!res.success && res.error) {
       setFormError(res.error);
+      setFormErrorCode(res.errorCode || null);
     }
   };
 
@@ -475,6 +480,60 @@ export const AuthModal: React.FC = () => {
                 >
                   Reset Password
                 </button>
+              </div>
+            )}
+
+            {formErrorCode === 'auth/unauthorized-domain' && (
+              <div className="pl-6 pt-1 space-y-2">
+                <div className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80">
+                  <span className="font-mono text-[11px] text-white truncate">
+                    {typeof window !== 'undefined' ? window.location.hostname : ''}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (typeof window !== 'undefined') {
+                        navigator.clipboard?.writeText(window.location.hostname);
+                        setCopiedDomain(true);
+                        setTimeout(() => setCopiedDomain(false), 2000);
+                      }
+                    }}
+                    className="shrink-0 flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-semibold cursor-pointer"
+                  >
+                    {copiedDomain ? <Check className="w-3 h-3 text-[#00E676]" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedDomain ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5">
+                  <a
+                    href="https://console.firebase.google.com/project/resounding-outpost-d8f9p/authentication/settings"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-semibold text-[11px] inline-flex items-center gap-1"
+                  >
+                    <span>Authorize Domain</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveTab('REGISTER');
+                      setFormError(null);
+                      setFormErrorCode(null);
+                    }}
+                    className="px-2.5 py-1 rounded-lg bg-[#00E676]/20 hover:bg-[#00E676]/30 text-[#00E676] font-semibold text-[11px] cursor-pointer"
+                  >
+                    Use Open Demat
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleGuestSignIn}
+                    className="px-2.5 py-1 rounded-lg bg-[#6C5CE7]/25 hover:bg-[#6C5CE7]/40 text-indigo-200 font-semibold text-[11px] cursor-pointer"
+                  >
+                    Demo Guest
+                  </button>
+                </div>
               </div>
             )}
           </div>

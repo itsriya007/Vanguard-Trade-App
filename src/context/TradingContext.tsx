@@ -122,7 +122,7 @@ interface TradingContextType {
   setMpin: (pin: string) => void;
   loginWithEmail: (email: string, pass: string) => Promise<{ success: boolean; error?: string; errorCode?: string }>;
   registerWithEmail: (email: string, pass: string, name: string, pan?: string) => Promise<{ success: boolean; error?: string; errorCode?: string }>;
-  loginWithGoogle: (options?: { idToken?: string }) => Promise<{ success: boolean; error?: string }>;
+  loginWithGoogle: (options?: { idToken?: string }) => Promise<{ success: boolean; error?: string; errorCode?: string }>;
   loginAsGuest: () => Promise<{ success: boolean; error?: string }>;
   resetPassword: (email: string) => Promise<{ success: boolean; error?: string }>;
   verifyResetCode: (oobCode: string) => Promise<{ success: boolean; email?: string; error?: string }>;
@@ -273,7 +273,7 @@ export const TradingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [authLoading, setAuthLoading] = useState<boolean>(true);
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
-  const [authPromptDismissed, setAuthPromptDismissed] = useState<boolean>(false);
+  const [authPromptDismissed, setAuthPromptDismissed] = useState<boolean>(true);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [biometricEnabled, setBiometricEnabled] = useState<boolean>(true);
   const [mpin, setMpinState] = useState<string>(() => {
@@ -1197,7 +1197,7 @@ export const TradingProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const loginWithGoogle = async (options?: {
     idToken?: string;
-  }): Promise<{ success: boolean; error?: string }> => {
+  }): Promise<{ success: boolean; error?: string; errorCode?: string }> => {
     try {
       const cred = options?.idToken
         ? await signInWithGoogleIdToken(options.idToken)
@@ -1217,7 +1217,7 @@ export const TradingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const msg = getAuthErrorMessage(err);
       if (hapticsEnabled) triggerHaptic('heavy');
       addToast('error', 'Google Sign-In Failed', msg);
-      return { success: false, error: msg };
+      return { success: false, error: msg, errorCode: err?.code };
     }
   };
 

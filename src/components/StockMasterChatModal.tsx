@@ -320,14 +320,31 @@ I have complete mastery over the Indian Stock Market (NSE & BSE), SEBI regulatio
         )
       );
     } catch (err) {
-      console.error('Error fetching chat response:', err);
-      const fallbackText = `**DhanGuru Stock Market Rule of Thumb:**
+      console.warn('Backend /api/chat unavailable, using local DhanGuru engine:', err);
+      const q = text.toLowerCase();
+      const matchedStock = stocks.find(
+        (s) =>
+          q.includes(s.symbol.toLowerCase()) ||
+          q.includes(s.name.toLowerCase().split(' ')[0])
+      );
 
-• **For Delivery (CNC):** Zero brokerage, 100% ownership, zero auto-square-off risk.
-• **For Intraday (MIS):** Requires strict Stop Loss and square-off before 3:20 PM IST.
-• **For Taxes:** STCG is 20% (< 1 year) and LTCG is 12.5% (> 1 year, first ₹1.25L exempt).
+      let fallbackText = '';
+      const isFinanceQuery =
+        matchedStock ||
+        /(stock|share|nifty|sensex|banknifty|buy|sell|invest|ipo|sip|mutual|demat|tax|stcg|ltcg|cnc|mis|brokerage|rsi|macd|market|portfolio|sector|loss|profit|stop loss|sl)/i.test(
+          q
+        );
 
-Feel free to ask again or click any suggested question below!`;
+      if (!isFinanceQuery) {
+        fallbackText = `⚠️ **Out of Scope — Financial & Indian Market Specialist Only**\n\nI am **DhanGuru**, specialized exclusively in NSE/BSE stocks, IPOs, Mutual Funds, SEBI rules, and portfolio analytics.\n\nTry asking:\n• *"Should I buy ${selectedStockContext?.symbol || 'TATAMOTORS'} today?"*\n• *"Compare CNC Delivery vs MIS Intraday"*\n• *"Explain STCG 20% and LTCG 12.5% tax rules"*`;
+      } else if (matchedStock) {
+        const up = matchedStock.changePercent >= 0;
+        fallbackText = `📊 **${matchedStock.name} (${matchedStock.symbol}) — Live Snapshot**\n\n• **LTP:** ₹${matchedStock.price.toFixed(2)} (${up ? '+' : ''}${matchedStock.changePercent.toFixed(2)}%)\n• **P/E Ratio:** ${matchedStock.peRatio} • **Market Cap:** ₹${matchedStock.marketCap.toLocaleString('en-IN')} Cr\n• **Technical Signals:** RSI ${matchedStock.technical.rsi} • MACD: ${matchedStock.technical.macd} • VWAP ₹${matchedStock.technical.vwap}\n\n*SEBI Note: Educational analysis only — use Delivery (CNC) for long-term investing with ₹0 brokerage.*`;
+      } else if (/which stock|best stock|invest today|recommend/i.test(q)) {
+        fallbackText = `🏆 **DhanGuru Top Conviction Focus: Tata Motors (\`TATAMOTORS\`)**\n\n• **Sector:** Auto & EV Leader (70%+ India passenger EV market share)\n• **Investment Mode:** Prefer **Delivery (CNC)** at ₹0 brokerage rather than leveraged MIS.\n• **Diversified Alternative:** Pair with **RELIANCE** or **HDFCBANK** for large-cap stability.\n\n*Disclaimer: Educational market overview only, not personalized SEBI investment advice.*`;
+      } else {
+        fallbackText = `**DhanGuru Market Intelligence:**\n\n• **Delivery (CNC):** ₹0 brokerage, permanent CDSL Demat ownership, zero 3:20 PM auto-square-off risk.\n• **Intraday (MIS):** Up to 5x margin with mandatory Stop Loss before 3:20 PM IST.\n• **Union Budget 2024 Taxes:** STCG is 20% (< 1 year); LTCG is 12.5% (> 1 year, first ₹1.25L exempt).\n\nTap any stock in your Watchlist to inspect live Level-2 depth and technicals!`;
+      }
 
       setMessages((prev) =>
         prev.map((msg) =>

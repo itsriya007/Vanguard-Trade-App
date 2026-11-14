@@ -107,8 +107,10 @@ export function getAuthErrorMessage(error: any): string {
       return 'This sign-in method is currently disabled in Firebase Console (Authentication → Sign-in method).';
     case 'auth/admin-restricted-operation':
       return 'Guest / anonymous sign-in is disabled in Firebase Console. Use Open Demat, Sign In, or Google.';
-    case 'auth/unauthorized-domain':
-      return 'This domain is not authorized in Firebase Console → Authentication → Settings → Authorized domains.';
+    case 'auth/unauthorized-domain': {
+      const host = typeof window !== 'undefined' ? window.location.hostname : 'this domain';
+      return `Google Sign-In requires "${host}" to be added in Firebase Console → Authentication → Settings → Authorized domains. You can still use Email / Open Demat or Demo Guest right now.`;
+    }
     case 'auth/popup-closed-by-user':
       return 'Google sign-in popup was closed before completing.';
     case 'auth/popup-blocked':
